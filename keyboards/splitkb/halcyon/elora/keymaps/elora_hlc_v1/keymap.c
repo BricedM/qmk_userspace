@@ -2,8 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
-#include "features/layer_lock.h"
-
+// #include "features/layer_lock.h"
 
 enum layers {
     _COLEMAK_DH = 0,
@@ -15,13 +14,49 @@ enum layers {
     _ADJUST,
 };
 
+enum keycodes {
+
+    // cmd+ent for slack
+    EP_SENT,
+
+    // Screenshot
+    SSFULL,
+    SSSELEC,
+
+    // The Riz Code
+    EP_DOSP_FAKE = SAFE_RANGE,
+    EP_PLUS_FAKE,
+
+    EP_SY_C_FAKE,
+    EP_SY_A_FAKE,
+    EP_SY_G_FAKE,
+    EP_SY_S_FAKE,
+
+    EP_OS_C,
+    EP_OS_A,
+    EP_OS_G,
+    EP_OS_S,
+
+    // SHORTCUTS
+    EP_PIPB, // <|
+    EP_PIPF, // |>
+    EP_ARR1, // ->
+    EP_ARR2, // =>
+    EP_CURD, // ./
+    EP_PARD, // ../
+    EP_HOMD, // ~/
+
+    EP_MENU,
+
+    REPEAT,
+};
+
 // Aliases for readability
 #define QWERTY   DF(_QWERTY)
 #define COLEMAK  DF(_COLEMAK_DH)
 
 #define SYM      MO(_SYM)
 #define NAV      MO(_NAV)
-#define NUMP     MO(_NUMPAD)
 #define ADJUST   MO(_ADJUST)
 
 #define CTL_ESC  MT(MOD_LCTL, KC_ESC)
@@ -30,7 +65,68 @@ enum layers {
 #define ALT_ENT  MT(MOD_LALT, KC_ENT)
 #define SHT_ENT  MT(MOD_LSFT, KC_ENT)
 
-#define NAV_SPC LT(_NAV, KC_SPC)
+// Slack Send message
+#define EP_SENT LGUI(KC_ENT)
+
+// ScreenShot
+#define SSFULL LGUI(S(KC_3))
+#define SSSELEC LGUI(S(KC_4))
+
+// TY: thumb keys
+#define EP_DOSP LT(_NAV, KC_SPC)
+#define EP_NUMP MO(_NUMPAD)
+#define EP_SFEN SFT_T(KC_ENT)
+#define EP_FNBS LT(EP_FN, KC_BSPC)
+#define EP_LBRC LT(_NAV, KC_LBRC)
+#define EP_RBRC SFT_T(KC_RBRC)
+
+// FN: one-shot keys
+#define EP_FN_G OSM(MOD_LGUI)
+#define EP_FN_A OSM(MOD_LALT)
+#define EP_FN_C OSM(MOD_LCTL)
+#define EP_FN_S OSM(MOD_LSFT)
+
+// SY: mod tap
+#define EP_SY_G GUI_T(EP_SY_G_FAKE)
+#define EP_SY_A ALT_T(EP_SY_A_FAKE)
+#define EP_SY_C CTL_T(EP_SY_C_FAKE)
+#define EP_SY_S SFT_T(EP_SY_S_FAKE)
+
+// DO: shortcuts
+#define EP_UNDO C(KC_Z)
+#define EP_REDO S(C(KC_Z))
+#define EP_COPY C(KC_C)
+#define EP_PSTE C(KC_V)
+#define EP_CUT C(KC_X)
+#define EP_BACK KC_WBAK
+#define EP_FRWD KC_WFWD
+#define EP_STAB S(KC_TAB)
+#define EP_WDL C(KC_LEFT)
+#define EP_WDR C(KC_RIGHT)
+#define EP_FLUP C(KC_HOME)
+#define EP_FLDW C(KC_END)
+#define EP_LNLF KC_HOME
+#define EP_LNRT KC_END
+
+// International keys (linux)
+//   #define EP_CEDL RALT(KC_COMM)
+//   #define EP_GBP A(KC_3)
+//   #define EP_EUR S(A(KC_2))
+
+// International keys (macos)
+/* #define EP_CEDL A(KC_C) */
+
+// Dead accent keys (linux)
+//   #define EP_DTIL RALT(S(KC_GRV))
+//   #define EP_ACUT RALT(KC_QUOT)
+//   #define EP_DCIR RALT(KC_6)
+//   #define EP_DGRV RALT(KC_GRV)
+
+// Dead accent keys (macos)
+#define EP_DTIL A(KC_N)
+#define EP_ACUT A(KC_E)
+#define EP_DCIR A(KC_I)
+#define EP_DGRV A(KC_GRV)
 
 // Note: LAlt/Enter (ALT_ENT) is not the same thing as the keyboard shortcut Alt+Enter.
 // The notation `mod/tap` denotes a key that activates the modifier `mod` when held down, and
@@ -58,12 +154,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
  * `-----------------------------------'                                              `-----------------------------------'
  */
- [_THE_RIZ] = LAYOUT_elora_hlc(
+ [_COLEMAK_DH] = LAYOUT_elora_hlc(
     KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_ESC ,
     KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
     CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
     KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                  ADJUST, KC_LGUI, SHT_ENT, NAV_SPC, NUMP,     _______,   SYM  , KC_SPC, _______, EP_SLSND,
+                                  ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , KC_SPC, _______, EP_SENT,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
 
@@ -91,7 +187,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
     CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
     KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                  ADJUST, KC_LGUI, SHT_ENT, NAV_SPC, NUMP,     _______,   SYM  , _______, _______, _______,
+                                  ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , _______, _______, _______,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
 
@@ -145,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_NUMPAD] = LAYOUT_elora_hlc(
        KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 ,  KC_F5 ,  KC_F6 ,                                      KC_F7 ,  KC_F8 ,  KC_F9 , KC_F10 , KC_F11 , KC_F12 ,
       _______, _______, _______, _______, _______, _______,                                     KC_MINS,   KC_1 ,  KC_2  ,  KC_3  , KC_PLUS, KC_BSPC,
-      _______, EP_SY_G, EP_SY_A, EP_SY_C, EP_SY_S, _______,                                     KC_ASTR,   KC_4 ,  KC_5  ,  KC_6  ,   KC_0 , KC_DEL ,
+      _______, KC_LGUI,MOD_LALT,MOD_LCTL, KC_LSFT, _______,                                     KC_ASTR,   KC_4 ,  KC_5  ,  KC_6  ,   KC_0 , KC_DEL ,
       _______, _______, _______, _______, _______, _______, _______, QK_LLCK, _______, _______, KC_SLSH,   KC_7 ,  KC_8  ,  KC_9  ,  KC_EQL, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
      _______, _______,  _______, _______, _______,                                                       _______, _______, _______, _______, _______
@@ -202,7 +298,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_ESC ,
     KC_TAB  , KC_Q ,  KC_W   ,  KC_E  ,   KC_R ,   KC_T ,                                        KC_Y,   KC_U ,  KC_I ,   KC_O ,  KC_P , KC_BSPC,
     CTL_ESC , KC_A ,  KC_S   ,  KC_D  ,   KC_F ,   KC_G ,                                        KC_H,   KC_J ,  KC_K ,   KC_L ,KC_SCLN,CTL_QUOT,
-    KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC,KC_CAPS,     NUMP  , KC_RBRC, KC_N,   KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
+    KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC,KC_CAPS,     _NUMPAD  , KC_RBRC, KC_N,   KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
                                ADJUST , KC_LGUI, ALT_ENT, KC_SPC , NAV   ,     SYM    , KC_SPC ,KC_RALT, KC_RGUI, KC_APP,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
@@ -265,44 +361,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //
 };
 
-// Custom Code
-enum keycodes {
-
-    // cmd+ent for slack
-    EP_SLSND,
-
-    // Screenshot
-    SSFULL,
-    SSSELEC,
-
-    // The Riz Code
-    EP_DOSP_FAKE = SAFE_RANGE,
-    EP_PLUS_FAKE,
-
-    EP_SY_C_FAKE,
-    EP_SY_A_FAKE,
-    EP_SY_G_FAKE,
-    EP_SY_S_FAKE,
-
-    EP_OS_C,
-    EP_OS_A,
-    EP_OS_G,
-    EP_OS_S,
-
-    // SHORTCUTS
-    EP_PIPB, // <|
-    EP_PIPF, // |>
-    EP_ARR1, // ->
-    EP_ARR2, // =>
-    EP_CURD, // ./
-    EP_PARD, // ../
-    EP_HOMD, // ~/
-
-    EP_MENU,
-
-    REPEAT,
-};
-
 typedef struct {
     uint16_t trigger;
     uint16_t mod;
@@ -311,96 +369,35 @@ typedef struct {
 
   oslm_state_t oslm_c = {
     .trigger = EP_OS_C,
-    .mod = MOD_BIT(KC_LCTL),
+    .mod = MOD_MASK_CTRL,
     .timer = 0,
   };
   oslm_state_t oslm_a = {
     .trigger = EP_OS_A,
-    .mod = MOD_BIT(KC_LALT),
+    .mod = MOD_MASK_ALT,
     .timer = 0,
   };
   oslm_state_t oslm_g = {
     .trigger = EP_OS_G,
-    .mod = MOD_BIT(KC_LGUI),
+    .mod = MOD_MASK_GUI,
     .timer = 0,
   };
   oslm_state_t oslm_s = {
     .trigger = EP_OS_S,
     // HACK: R is used to overcome the count>1 issue (see journal).
-    .mod = MOD_BIT(KC_RSFT),
+    .mod = MOD_MASK_SHIFT,
     .timer = 0,
   };
 
-  // Slack Send message
-  #define EP_SLSND LGUI(KC_ENT)
 
-  // ScreenShot
-  #define SSFULL LGUI(S(KC_3))
-  #define SSSELEC LGUI(S(KC_4))
-
-  // TY: thumb keys
-  #define EP_DOSP LT(EP_DO, KC_SPC)
-  #define EP_SYMO MO(EP_SY)
-  #define EP_SFEN SFT_T(KC_ENT)
-  #define EP_FNBS LT(EP_FN, KC_BSPC)
-  #define EP_LBRC LT(EP_DO, KC_LBRC)
-  #define EP_RBRC SFT_T(KC_RBRC)
-
-  // FN: one-shot keys
-  #define EP_FN_G OSM(MOD_LGUI)
-  #define EP_FN_A OSM(MOD_LALT)
-  #define EP_FN_C OSM(MOD_LCTL)
-  #define EP_FN_S OSM(MOD_LSFT)
-
-  // SY: mod tap
-  #define EP_SY_G GUI_T(EP_SY_G_FAKE)
-  #define EP_SY_A ALT_T(EP_SY_A_FAKE)
-  #define EP_SY_C CTL_T(EP_SY_C_FAKE)
-  #define EP_SY_S SFT_T(EP_SY_S_FAKE)
-
-  // DO: shortcuts
-  #define EP_UNDO C(KC_Z)
-  #define EP_REDO S(C(KC_Z))
-  #define EP_COPY C(KC_C)
-  #define EP_PSTE C(KC_V)
-  #define EP_CUT C(KC_X)
-  #define EP_BACK KC_WBAK
-  #define EP_FRWD KC_WFWD
-  #define EP_STAB S(KC_TAB)
-  #define EP_WDL C(KC_LEFT)
-  #define EP_WDR C(KC_RIGHT)
-  #define EP_FLUP C(KC_HOME)
-  #define EP_FLDW C(KC_END)
-  #define EP_LNLF KC_HOME
-  #define EP_LNRT KC_END
-
-  // International keys (linux)
-//   #define EP_CEDL RALT(KC_COMM)
-//   #define EP_GBP A(KC_3)
-//   #define EP_EUR S(A(KC_2))
-
-  // International keys (macos)
-  /* #define EP_CEDL A(KC_C) */
-
-  // Dead accent keys (linux)
-//   #define EP_DTIL RALT(S(KC_GRV))
-//   #define EP_ACUT RALT(KC_QUOT)
-//   #define EP_DCIR RALT(KC_6)
-//   #define EP_DGRV RALT(KC_GRV)
-
-  // Dead accent keys (macos)
-  #define EP_DTIL A(KC_N)
-  #define EP_ACUT A(KC_E)
-  #define EP_DCIR A(KC_I)
-  #define EP_DGRV A(KC_GRV)
 
 // KEY OVERRIDES
 
 // S(EP_DOSP) -> KC_UNDS
 const key_override_t unds_ko = ko_make_basic(MOD_BIT(KC_LSFT), EP_DOSP, KC_UNDS);
 
-// S(EP_SYMO) -> KC_AT
-const key_override_t at_ko = ko_make_basic(MOD_BIT(KC_LSFT), EP_SYMO, KC_AT);
+// S(EP_NUMP) -> KC_AT
+const key_override_t at_ko = ko_make_basic(MOD_BIT(KC_LSFT), EP_NUMP, KC_AT);
 
 // S(KC_COMMA) -> KC_SCLN
 const key_override_t scln_ko = ko_make_basic(MOD_BIT(KC_LSFT), KC_COMMA, KC_SCLN);
@@ -417,16 +414,16 @@ const key_override_t sbsp_ko = _ko_make_strict_negmods(MOD_BIT(KC_RSFT), KC_BSPC
 // A(KC_DEL) -> C(KC_K)
 const key_override_t c_k_ko = _ko_make_strict(MOD_BIT(KC_LALT), KC_DEL, C(KC_K));
 
-const key_override_t **key_overrides = (const key_override_t *[]) {
-  &unds_ko,
-  &at_ko,
-  &scln_ko,
-  &coln_ko,
-  &ques_ko,
-  &c_k_ko,
-  &sbsp_ko,
-  NULL
-};
+const key_override_t *key_overrides[] = {
+    &unds_ko,
+    &at_ko,
+    &scln_ko,
+    &coln_ko,
+    &ques_ko,
+    &c_k_ko,
+    &sbsp_ko,
+    NULL
+ };
 
 
 // REPEAT
@@ -499,7 +496,7 @@ void process_osml(oslm_state_t *oslm_state, uint16_t keycode, keyrecord_t *recor
     if (timer_elapsed(oslm_state->timer) < TAPPING_TERM) {
       // tap: keep all current mods and set oneshot layer
       set_oneshot_mods(mods);
-      set_oneshot_layer(EP_MD, ONESHOT_START);
+      set_oneshot_layer( _THE_RIZ, ONESHOT_START);
     }
   }
 }
@@ -525,7 +522,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       oneshot_mods_state = get_oneshot_mods();
 
       // Lock the layer when the key is pressed
-      if (!process_layer_lock(keycode, record, QK_LAYER_LOCK)) { return false; }
+    //   if (!process_layer_lock(keycode, record, QK_LAYER_LOCK)) { return false; }
 
       bool ret = false;
 
@@ -533,7 +530,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // Slack Send message
         // Full Screenshot
         // Screenshot Selection
-        case EP_SLSND:
+        case EP_SENT:
         case SSFULL:
         case SSSELEC:
           if (record->event.pressed) {
@@ -723,7 +720,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         default:
           // Clear current OSLM layer state.
-          if (IS_LAYER_ON(EP_MD) && record->event.pressed) {
+          if (IS_LAYER_ON(_THE_RIZ) && record->event.pressed) {
             clear_oneshot_layer_state(ONESHOT_PRESSED);
           }
           ret = true;
