@@ -47,4 +47,3 @@
   .enabled           = NULL \
 };
 
-// #define LAYER_LOCK_ENABLE

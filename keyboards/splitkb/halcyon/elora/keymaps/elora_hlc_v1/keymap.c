@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include QMK_KEYBOARD_H
-// #include "features/layer_lock.h"
 
 enum layers {
     _COLEMAK_DH = 0,
@@ -16,8 +15,9 @@ enum layers {
 
 enum keycodes {
 
-    // cmd+ent for slack
-    EP_SENT,
+    EP_SENT, // For cmd + enter
+    LGUI_SPC, // For cmd + space
+    LGUIT,   // For cmd + t
 
     // Screenshot
     SSFULL,
@@ -65,12 +65,12 @@ enum keycodes {
 #define ALT_ENT  MT(MOD_LALT, KC_ENT)
 #define SHT_ENT  MT(MOD_LSFT, KC_ENT)
 
-// Slack Send message
-#define EP_SENT LGUI(KC_ENT)
 
-// ScreenShot
-#define SSFULL LGUI(S(KC_3))
-#define SSSELEC LGUI(S(KC_4))
+#define EP_SENT LGUI(KC_ENT) // Comman + Enter
+#define LGUI_SPC LGUI(KC_SPC) // Command + Space
+#define LGUIT    LGUI(KC_T)    // Command + T
+#define SSFULL LGUI(S(KC_3)) // ScreenShot Full Screen
+#define SSSELEC LGUI(S(KC_4)) // ScreenShot Selection
 
 // TY: thumb keys
 #define EP_DOSP LT(_NAV, KC_SPC)
@@ -93,20 +93,20 @@ enum keycodes {
 #define EP_SY_S SFT_T(EP_SY_S_FAKE)
 
 // DO: shortcuts
-#define EP_UNDO C(KC_Z)
-#define EP_REDO S(C(KC_Z))
-#define EP_COPY C(KC_C)
-#define EP_PSTE C(KC_V)
-#define EP_CUT C(KC_X)
-#define EP_BACK KC_WBAK
-#define EP_FRWD KC_WFWD
+#define EP_UNDO LGUI(KC_Z)
+#define EP_REDO LGUI(S(KC_Z))
+#define EP_COPY LGUI(KC_C)
+#define EP_PSTE LGUI(KC_V)
+#define EP_CUT LGUI(KC_X)
+#define EP_BACK LGUI(KC_LEFT_BRACKET)
+#define EP_FRWD LGUI(KC_RIGHT_BRACKET)
 #define EP_STAB S(KC_TAB)
-#define EP_WDL C(KC_LEFT)
-#define EP_WDR C(KC_RIGHT)
-#define EP_FLUP C(KC_HOME)
-#define EP_FLDW C(KC_END)
-#define EP_LNLF KC_HOME
-#define EP_LNRT KC_END
+#define EP_WDL LALT(KC_LEFT)
+#define EP_WDR LALT(KC_RIGHT)
+#define EP_FLUP LGUI(KC_UP)
+#define EP_FLDW LGUI(KC_DOWN)
+#define EP_LNLF LGUI(KC_LEFT)
+#define EP_LNRT LGUI(KC_RIGHT)
 
 // International keys (linux)
 //   #define EP_CEDL RALT(KC_COMM)
@@ -147,8 +147,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   D  |   V  | [ {  |CapsLk|  | -  _ |  ] } |   K  |   H  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |Adjust| LGUI | LShi/| Nav/ |NUMPAD|  |      | Sym  | Space|      | LGUI+|
- *                        |      |      | Enter| Space|      |  |      |      |      |      | Enter|
+ *                        |Adjust| LGUI | LShi/| Nav/ |NUMPAD|  |      | Sym  | Space| LGUI+| LGUI+|
+ *                        |      |      | Enter| Space|      |  |      |      |      | Space| Enter|
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
  * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
@@ -159,13 +159,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
     CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
     KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                  ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , KC_SPC, _______, EP_SENT,
+                                  ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , KC_SPC, LGUI_SPC, EP_SENT,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
 
 /*
  * Colemak DH, duplicate layout of the base <> to EP_MD
- *
+*
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |  Esc   |   1  |   2  |   3  |   4  |   5  |                              |   6  |   7  |   8  |   9  |   0  |  Esc   |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
@@ -175,8 +175,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | LShift |   Z  |   X  |   C  |   D  |   V  | [ {  |CapsLk|  | -  _ |  ] } |   K  |   H  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |Adjust| LGUI | LShi/| Nav/ |NUMPAD|  |      | Sym  |      |      |      |
- *                        |      |      | Enter| Space|      |  |      |      |      |      |      |
+ *                        |Adjust| LGUI | LShi/| Nav/ |NUMPAD|  |      | Sym  | Space| LGUI+| LGUI+|
+ *                        |      |      | Enter| Space|      |  |      |      |      | Space| Enter|
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
  * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
@@ -187,7 +187,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
     CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
     KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
-                                  ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , _______, _______, _______,
+                                  ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , KC_SPC, LGUI_SPC, EP_SENT,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
 
@@ -212,8 +212,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_NAV] = LAYOUT_elora_hlc(
       _______, _______, _______, _______, _______, _______,                                      SSFULL, SSSELEC, _______, _______, _______, _______,
-      KC_TAB , REPEAT , KC_ESC , EP_BACK, EP_FRWD, KC_WH_U,                                     KC_PGUP,  EP_WDL,  EP_WDR, EP_LNLF, EP_FLUP, KC_DEL ,
-      KC_ESC , EP_OS_G, EP_OS_A, EP_OS_C, EP_OS_S, KC_WH_D,                                     KC_LEFT, KC_DOWN,  KC_UP , KC_RGHT, EP_LNRT, KC_INS ,
+      KC_TAB , REPEAT , KC_ESC , EP_BACK, EP_FRWD, KC_WH_U,                                     KC_PGUP,  EP_WDL,  KC_UP ,  EP_WDR, EP_FLUP, KC_DEL ,
+      KC_ESC , EP_OS_G, EP_OS_A, EP_OS_C, EP_OS_S, KC_WH_D,                                     EP_LNLF, KC_LEFT, KC_DOWN, KC_RGHT, EP_LNRT, KC_INS ,
       KC_LSFT, EP_UNDO, EP_CUT , EP_COPY, EP_PSTE, EP_REDO, _______, KC_VOLU, KC_BRIU, _______, KC_PGDN, EP_STAB,  KC_ESC,  KC_TAB, EP_FLDW, _______,
                                  _______, _______, _______, _______, KC_VOLD, KC_BRID,  KC_ENT, KC_BSPC, _______, _______,
      _______, _______,  _______, _______, _______,                                                       _______, _______, _______, _______, _______
@@ -241,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_NUMPAD] = LAYOUT_elora_hlc(
        KC_F1 ,  KC_F2 ,  KC_F3 ,  KC_F4 ,  KC_F5 ,  KC_F6 ,                                      KC_F7 ,  KC_F8 ,  KC_F9 , KC_F10 , KC_F11 , KC_F12 ,
       _______, _______, _______, _______, _______, _______,                                     KC_MINS,   KC_1 ,  KC_2  ,  KC_3  , KC_PLUS, KC_BSPC,
-      _______, KC_LGUI,MOD_LALT,MOD_LCTL, KC_LSFT, _______,                                     KC_ASTR,   KC_4 ,  KC_5  ,  KC_6  ,   KC_0 , KC_DEL ,
+      _______, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, _______,                                     KC_ASTR,   KC_4 ,  KC_5  ,  KC_6  ,   KC_0 , KC_DEL ,
       _______, _______, _______, _______, _______, _______, _______, QK_LLCK, _______, _______, KC_SLSH,   KC_7 ,  KC_8  ,  KC_9  ,  KC_EQL, _______,
                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
      _______, _______,  _______, _______, _______,                                                       _______, _______, _______, _______, _______
@@ -369,30 +369,28 @@ typedef struct {
 
   oslm_state_t oslm_c = {
     .trigger = EP_OS_C,
-    .mod = MOD_MASK_CTRL,
+    .mod = MOD_BIT(KC_LCTL),
     .timer = 0,
   };
   oslm_state_t oslm_a = {
     .trigger = EP_OS_A,
-    .mod = MOD_MASK_ALT,
+    .mod = MOD_BIT(KC_LALT),
     .timer = 0,
   };
   oslm_state_t oslm_g = {
     .trigger = EP_OS_G,
-    .mod = MOD_MASK_GUI,
+    .mod = MOD_BIT(KC_LGUI),
     .timer = 0,
   };
   oslm_state_t oslm_s = {
     .trigger = EP_OS_S,
-    // HACK: R is used to overcome the count>1 issue (see journal).
-    .mod = MOD_MASK_SHIFT,
+    .mod = MOD_BIT(KC_LSFT),
     .timer = 0,
   };
 
 
-
+/*
 // KEY OVERRIDES
-
 // S(EP_DOSP) -> KC_UNDS
 const key_override_t unds_ko = ko_make_basic(MOD_BIT(KC_LSFT), EP_DOSP, KC_UNDS);
 
@@ -409,10 +407,10 @@ const key_override_t coln_ko = ko_make_basic(MOD_BIT(KC_LSFT), KC_DOT, KC_COLN);
 const key_override_t ques_ko = ko_make_basic(MOD_BIT(KC_LSFT), KC_EXLM, KC_QUES);
 
 // S(KC_BSPC) -> KC_DEL
-const key_override_t sbsp_ko = _ko_make_strict_negmods(MOD_BIT(KC_RSFT), KC_BSPC, KC_DEL, MOD_BIT(KC_LGUI));
+const key_override_t sbsp_ko = ko_make_with_layers_and_negmods(MOD_BIT(KC_RSFT), KC_BSPC, KC_DEL, ~0, MOD_BIT(KC_LGUI));
 
 // A(KC_DEL) -> C(KC_K)
-const key_override_t c_k_ko = _ko_make_strict(MOD_BIT(KC_LALT), KC_DEL, C(KC_K));
+const key_override_t c_k_ko = ko_make_with_layers_and_negmods(MOD_BIT(KC_LALT), KC_DEL, C(KC_K), ~0, 0);
 
 const key_override_t *key_overrides[] = {
     &unds_ko,
@@ -421,10 +419,9 @@ const key_override_t *key_overrides[] = {
     &coln_ko,
     &ques_ko,
     &c_k_ko,
-    &sbsp_ko,
-    NULL
- };
-
+    &sbsp_ko
+};
+*/
 
 // REPEAT
 
@@ -478,8 +475,7 @@ void processrepeat_key(uint16_t keycode, const keyrecord_t *record) {
   }
 }
 
-// OSLM
-
+// OSLM: process a OSLM key
 void process_osml(oslm_state_t *oslm_state, uint16_t keycode, keyrecord_t *record) {
   static uint16_t mods = 0;
   if (record->event.pressed) {
@@ -527,9 +523,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       bool ret = false;
 
       switch (keycode) {
-        // Slack Send message
-        // Full Screenshot
-        // Screenshot Selection
+
+        case EP_UNDO:
+        case EP_REDO:
+        case EP_COPY:
+        case EP_PSTE:
+        case EP_CUT:
+        case EP_BACK:
+        case EP_FRWD:
+        case EP_STAB:
+        case EP_WDL:
+        case EP_WDR:
+        case EP_FLUP:
+        case EP_FLDW:
+        case EP_LNLF:
+        case EP_LNRT:
         case EP_SENT:
         case SSFULL:
         case SSSELEC:
@@ -686,37 +694,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         // END SYMBOL SHORTCUTS
 
         // S(KC_EQL): ../
-        case KC_EQL:
-          if (record->event.pressed && (mods_state == MOD_BIT(KC_LSFT))) {
-            del_mods(MOD_BIT(KC_LSFT));
-            SEND_STRING("../");
-            add_mods(MOD_BIT(KC_LSFT));
-          } else {
-            ret = true;
-          }
-          break;
+        // case KC_EQL:
+        //   if (record->event.pressed && (mods_state == MOD_BIT(KC_LSFT))) {
+        //     del_mods(MOD_BIT(KC_LSFT));
+        //     SEND_STRING("../");
+        //     add_mods(MOD_BIT(KC_LSFT));
+        //   } else {
+        //     ret = true;
+        //   }
+        //   break;
 
         // S(KC_MINS): ./
-        case KC_MINS:
-          if (record->event.pressed && (mods_state == MOD_BIT(KC_LSFT))) {
-            del_mods(MOD_BIT(KC_LSFT));
-            SEND_STRING("./");
-            add_mods(MOD_BIT(KC_LSFT));
-          } else {
-            ret = true;
-          }
-          break;
+        // case KC_MINS:
+        //   if (record->event.pressed && (mods_state == MOD_BIT(KC_LSFT))) {
+        //     del_mods(MOD_BIT(KC_LSFT));
+        //     SEND_STRING("./");
+        //     add_mods(MOD_BIT(KC_LSFT));
+        //   } else {
+        //     ret = true;
+        //   }
+        //   break;
 
         // S(KC_SLSH): ~/
-        case KC_SLSH:
-          if (record->event.pressed && (mods_state == MOD_BIT(KC_LSFT))) {
-            del_mods(MOD_BIT(KC_LSFT));
-            SEND_STRING("~/");
-            add_mods(MOD_BIT(KC_LSFT));
-          } else {
-            ret = true;
-          }
-          break;
+        // case KC_SLSH:
+        //   if (record->event.pressed && (mods_state == MOD_BIT(KC_LSFT))) {
+        //     del_mods(MOD_BIT(KC_LSFT));
+        //     SEND_STRING("~/");
+        //     add_mods(MOD_BIT(KC_LSFT));
+        //   } else {
+        //     ret = true;
+        //   }
+        //   break;
 
         default:
           // Clear current OSLM layer state.
