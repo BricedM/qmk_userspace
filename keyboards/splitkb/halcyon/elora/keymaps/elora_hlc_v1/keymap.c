@@ -4,9 +4,9 @@
 #include QMK_KEYBOARD_H
 
 enum layers {
-    _COLEMAK_DH = 0,
-    _THE_RIZ,
+    _COLEMAK = 0,
     _NAV,
+    _THE_RIZ,
     _SYM,
     _NUMPAD,
     _QWERTY,
@@ -15,7 +15,7 @@ enum layers {
 
 enum keycodes {
 
-    EP_SENT, // For cmd + enter
+    EP_SENT = SAFE_RANGE, // For cmd + enter
     LGUI_SPC, // For cmd + space
     LGUIT,   // For cmd + t
 
@@ -24,7 +24,7 @@ enum keycodes {
     SSSELEC,
 
     // The Riz Code
-    EP_DOSP_FAKE = SAFE_RANGE,
+    EP_DOSP_FAKE,
     EP_PLUS_FAKE,
 
     EP_SY_C_FAKE,
@@ -53,7 +53,7 @@ enum keycodes {
 
 // Aliases for readability
 #define QWERTY   DF(_QWERTY)
-#define COLEMAK  DF(_COLEMAK_DH)
+#define COLEMAK  DF(_COLEMAK)
 
 #define SYM      MO(_SYM)
 #define NAV      MO(_NAV)
@@ -136,16 +136,16 @@ enum keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /*
- * Colemak DH
+ * Colemak
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  Esc   |   1  |   2  |   3  |   4  |   5  |                              |   6  |   7  |   8  |   9  |   0  |  Esc   |
+ * |  Esc   |   1  |   2  |   3  |   4  |   5  |                              |   6  |   7  |   8  |   9  |   0  | Delete |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |  Tab   |   Q  |   W  |   F  |   P  |   B  |                              |   J  |   L  |   U  |   Y  | ;  : |  Bksp  |
+ * |  Tab   |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |  Bksp  |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |Ctrl/Esc|   A  |   R  |   S  |   T  |   G  |                              |   M  |   N  |   E  |   I  |   O  |Ctrl/' "|
+ * |Ctrl/Esc|   A  |   R  |   S  |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |Ctrl/' "|
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   D  |   V  | [ {  |CapsLk|  | -  _ |  ] } |   K  |   H  | ,  < | . >  | /  ? | RShift |
+ * | LShift |   Z  |   X  |   C  |   D  |   B  | [ {  |CapsLk|  | -  _ |  ] } |   K  |   M  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |Adjust| LGUI | LShi/| Nav/ |NUMPAD|  |      | Sym  | Space| LGUI+| LGUI+|
  *                        |      |      | Enter| Space|      |  |      |      |      | Space| Enter|
@@ -154,26 +154,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
  * `-----------------------------------'                                              `-----------------------------------'
  */
- [_COLEMAK_DH] = LAYOUT_elora_hlc(
-    KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_ESC ,
-    KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
-    CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
-    KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
+ [_COLEMAK] = LAYOUT_elora_hlc(
+    KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_DEL ,
+    KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_G ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
+    CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_D ,                                        KC_H,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
+    KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
                                   ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , KC_SPC, LGUI_SPC, EP_SENT,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
 
 /*
- * Colemak DH, duplicate layout of the base <> to EP_MD
-*
+ * Colemak, duplicate layout of the base <> to EP_MD
+ *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  Esc   |   1  |   2  |   3  |   4  |   5  |                              |   6  |   7  |   8  |   9  |   0  |  Esc   |
+ * |  Esc   |   1  |   2  |   3  |   4  |   5  |                              |   6  |   7  |   8  |   9  |   0  | Delete |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |  Tab   |   Q  |   W  |   F  |   P  |   B  |                              |   J  |   L  |   U  |   Y  | ;  : |  Bksp  |
+ * |  Tab   |   Q  |   W  |   F  |   P  |   G  |                              |   J  |   L  |   U  |   Y  | ;  : |  Bksp  |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |Ctrl/Esc|   A  |   R  |   S  |   T  |   G  |                              |   M  |   N  |   E  |   I  |   O  |Ctrl/' "|
+ * |Ctrl/Esc|   A  |   R  |   S  |   T  |   D  |                              |   H  |   N  |   E  |   I  |   O  |Ctrl/' "|
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   D  |   V  | [ {  |CapsLk|  | -  _ |  ] } |   K  |   H  | ,  < | . >  | /  ? | RShift |
+ * | LShift |   Z  |   X  |   C  |   D  |   B  | [ {  |CapsLk|  | -  _ |  ] } |   K  |   M  | ,  < | . >  | /  ? | RShift |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |Adjust| LGUI | LShi/| Nav/ |NUMPAD|  |      | Sym  | Space| LGUI+| LGUI+|
  *                        |      |      | Enter| Space|      |  |      |      |      | Space| Enter|
@@ -183,10 +183,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------'                                              `-----------------------------------'
  */
  [_THE_RIZ] = LAYOUT_elora_hlc(
-    KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_ESC ,
-    KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_B ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
-    CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_G ,                                        KC_M,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
-    KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_D ,   KC_V , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_H ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
+    KC_ESC  , KC_1 ,  KC_2   ,  KC_3  ,   KC_4 ,   KC_5 ,                                        KC_6 ,  KC_7 ,  KC_8 ,   KC_9 ,  KC_0 , KC_DEL ,
+    KC_TAB  , KC_Q ,  KC_W   ,  KC_F  ,   KC_P ,   KC_G ,                                        KC_J,   KC_L ,  KC_U ,   KC_Y ,KC_SCLN, KC_BSPC,
+    CTL_ESC , KC_A ,  KC_R   ,  KC_S  ,   KC_T ,   KC_D ,                                        KC_H,   KC_N ,  KC_E ,   KC_I ,  KC_O , CTL_QUOT,
+    KC_LSFT , KC_Z ,  KC_X   ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC,KC_CAPS,     KC_MINS, KC_RBRC, KC_K,   KC_M ,KC_COMM, KC_DOT ,KC_SLSH, KC_RSFT,
                                   ADJUST, KC_LGUI, SHT_ENT, EP_DOSP, EP_NUMP,     _______,   SYM  , KC_SPC, LGUI_SPC, EP_SENT,
     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
    ),
@@ -203,7 +203,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | lshift | Undo |  Cut | Copy | Paste| Redo |      | volup|  |Bri Dn|      | pgDn | UnTab|  esc |  tab |ctrend|        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      | voldn|  |Bri Up| Enter| Bksp |      |      |
+ *                        |      |      |      |      |8Po voldn|  |Bri Up| Enter| Bksp |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
@@ -513,39 +513,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         get_oneshot_mods()
       );
     #endif
+        bool ret = false;
 
       mods_state = get_mods();
       oneshot_mods_state = get_oneshot_mods();
 
-      // Lock the layer when the key is pressed
-    //   if (!process_layer_lock(keycode, record, QK_LAYER_LOCK)) { return false; }
-
-      bool ret = false;
-
       switch (keycode) {
-
-        case EP_UNDO:
-        case EP_REDO:
-        case EP_COPY:
-        case EP_PSTE:
-        case EP_CUT:
-        case EP_BACK:
-        case EP_FRWD:
-        case EP_STAB:
-        case EP_WDL:
-        case EP_WDR:
-        case EP_FLUP:
-        case EP_FLDW:
-        case EP_LNLF:
-        case EP_LNRT:
-        case EP_SENT:
-        case SSFULL:
-        case SSSELEC:
-          if (record->event.pressed) {
-            tap_code16(keycode);
-          }
-          ret = false;
-          break;
 
         case EP_DOSP:
           // Intercept hold release to clear OSM/OSLM state.
