@@ -108,29 +108,11 @@ enum keycodes {
 #define EP_LNLF LGUI(KC_LEFT)
 #define EP_LNRT LGUI(KC_RIGHT)
 
-// International keys (linux)
-//   #define EP_CEDL RALT(KC_COMM)
-//   #define EP_GBP A(KC_3)
-//   #define EP_EUR S(A(KC_2))
-
-// International keys (macos)
-/* #define EP_CEDL A(KC_C) */
-
-// Dead accent keys (linux)
-//   #define EP_DTIL RALT(S(KC_GRV))
-//   #define EP_ACUT RALT(KC_QUOT)
-//   #define EP_DCIR RALT(KC_6)
-//   #define EP_DGRV RALT(KC_GRV)
-
 // Dead accent keys (macos)
 #define EP_DTIL A(KC_N)
 #define EP_ACUT A(KC_E)
 #define EP_DCIR A(KC_I)
 #define EP_DGRV A(KC_GRV)
-
-// Note: LAlt/Enter (ALT_ENT) is not the same thing as the keyboard shortcut Alt+Enter.
-// The notation `mod/tap` denotes a key that activates the modifier `mod` when held down, and
-// produces the key `tap` when tapped (i.e. pressed and released).
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -203,7 +185,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * | lshift | Undo |  Cut | Copy | Paste| Redo |      | volup|  |Bri Dn|      | pgDn | UnTab|  esc |  tab |ctrend|        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      |8Po voldn|  |Bri Up| Enter| Bksp |      |      |
+ *                        |      |      |      |      | voldn|  |Bri Up| Enter| Bksp |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  * ,-----------------------------------.                                              ,-----------------------------------.
